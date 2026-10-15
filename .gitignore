@@ -1,0 +1,17 @@
+# Virtual environment
+venv/
+env/
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Database (optional to commit or ignore; start fresh on deploy)
+*.db-journal
+
+# Editor
+.vscode/
+.idea/
+*.swp

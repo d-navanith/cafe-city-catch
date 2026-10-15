@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cafe &amp; City Catch | Beyond Hello, World!</title>
+  <link rel="stylesheet" href="/css/game.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
+</head>
+<body>
+
+  <!-- Audio Toggle Button -->
+  <button id="btn-sound-toggle" class="sound-toggle-btn" title="Toggle Sound">🔊</button>
+
+  <main class="app-shell">
+    
+    <!-- ========================================================
+         SCREEN 1: TITLE SCREEN
+         ======================================================== -->
+    <section id="screen-title" class="screen active">
+      <div class="title-logo-container">
+        <div class="paw-badge">✦ BEYOND HELLO, WORLD! ✦</div>
+        <h1 class="title-main-text">PAW &amp; BEAK CATCH</h1>
+        <p class="title-tagline">CATCH TREATS • DODGE BOMBS • SUPER POWERS • LIVE COMPETITION</p>
+      </div>
+
+      <div class="preview-mascots">
+        <div class="mascot-avatar">
+          <img src="/static/assets/characters/pippin.png" alt="Pippin the Pig" draggable="false">
+          <span>PIPPIN ☕ (Barista Pig)</span>
+        </div>
+        <div class="mascot-avatar">
+          <img src="/static/assets/characters/percy.png" alt="Percy the Pigeon" draggable="false">
+          <span>PERCY 🍞 (City Pigeon)</span>
+        </div>
+      </div>
+
+      <div class="title-menu-actions">
+        <button id="btn-to-select" class="btn btn-primary">PLAY GAME</button>
+        <button id="btn-to-how-to" class="btn btn-secondary">SKILLS &amp; ITEMS</button>
+        <button id="btn-to-leaderboard" class="btn btn-gold">🏆 HIGH SCORES</button>
+      </div>
+
+      <footer class="title-footer">
+        Built with Python &amp; High-Definition Canvas <span>•</span> Beyond Hello, World!
+        <small>Webinar Competition Edition</small>
+      </footer>
+    </section>
+
+    <!-- ========================================================
+         SCREEN 2: CHARACTER PICK WITH UNIQUE ABILITIES
+         ======================================================== -->
+    <section id="screen-select" class="screen">
+      <button id="btn-select-back" class="btn btn-secondary btn-back">&lt; BACK</button>
+      
+      <h2 class="screen-heading">CHOOSE YOUR CHARACTER!</h2>
+      
+      <div class="character-selection-cards">
+        <!-- Pippin -->
+        <div class="char-card selected" data-char="pig">
+          <img src="/static/assets/characters/pippin.png" alt="Pippin" draggable="false">
+          <h3 class="char-title">PIPPIN</h3>
+          <span class="char-subtitle">THE BARISTA PIG</span>
+          <div class="char-skill-badge">
+            <b>⚡ ACTIVE: ESPRESSO RUSH (SHIFT)</b>
+            Steam-powered horizontal supersonic dash with invulnerability.
+          </div>
+          <div class="char-skill-badge">
+            <b>🌟 SUPER: CAFE FRENZY (SPACE)</b>
+            Aroma magnet pulls all pastries &amp; coffee from the entire sky into Pippin's cup for 6s!
+          </div>
+        </div>
+
+        <!-- Percy -->
+        <div class="char-card" data-char="pigeon">
+          <img src="/static/assets/characters/percy.png" alt="Percy" draggable="false">
+          <h3 class="char-title">PERCY</h3>
+          <span class="char-subtitle">THE CITY PIGEON</span>
+          <div class="char-skill-badge">
+            <b>📢 ACTIVE: WING FLAP GUST (SHIFT)</b>
+            Powerful wind flap shockwave that blows away nearby bombs &amp; trash!
+          </div>
+          <div class="char-skill-badge">
+            <b>🌟 SUPER: PIGEON ZOOMIES (SPACE)</b>
+            Percy pecks at warp speed, crushes bombs for bonus points, and summons food rain!
+          </div>
+        </div>
+      </div>
+
+      <button id="btn-ready-confirm" class="btn btn-primary" style="width: 280px;">SELECT &amp; PLAY &gt;</button>
+    </section>
+
+    <!-- ========================================================
+         SCREEN 3: HOW TO PLAY / READY SCREEN
+         ======================================================== -->
+    <section id="screen-ready" class="screen">
+      <button id="btn-ready-back" class="btn btn-secondary btn-back">&lt; BACK</button>
+
+      <div class="how-to-panel">
+        <h2 style="font-family: var(--title-font); font-size: 26px; color: #e11d48;">SKILLS &amp; ITEMS GUIDE</h2>
+        <p style="font-size: 13px; color: #4b5563; text-align: center; font-weight: 600;">
+          Build continuous catch streaks for massive <b>COMBO MULTIPLIERS (x2, x3, x5!)</b>.<br>
+          Fill your <b>Special Energy Meter</b> to unleash character super moves!
+        </p>
+
+        <div class="items-guide-grid" id="items-guide-container">
+          <!-- Populated from game-data.js -->
+        </div>
+
+        <div class="control-tips">
+          <span>CONTROLS:</span>
+          <span class="key-badge">A / D / ◄ ►</span> MOVE
+          <span class="key-badge">SHIFT</span> ACTIVE SKILL
+          <span class="key-badge">SPACE / E</span> SUPER MOVE
+          <span class="key-badge">P</span> PAUSE
+        </div>
+
+        <button id="btn-start-round" class="btn btn-primary" style="width: 280px;">START ROUND! 🚀</button>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SCREEN 4: GAMEPLAY SCREEN (HD CANVAS)
+         ======================================================== -->
+    <section id="screen-game" class="screen">
+      <div class="game-topbar">
+        <div class="brand-tag"><span>✦</span> CAFE &amp; CITY CATCH</div>
+        <div class="lives-container" id="hud-lives">💖💖💖</div>
+        
+        <!-- Energy Meter in HUD -->
+        <div class="paw-meter-wrap">
+          <span class="paw-meter-label">SUPER METER:</span>
+          <div class="paw-bar-outer" id="paw-bar-outer">
+            <div class="paw-bar-inner" id="hud-paw-meter"></div>
+          </div>
+        </div>
+
+        <!-- Combo Multiplier Badge -->
+        <div id="hud-combo" class="combo-badge">COMBO x2!</div>
+
+        <div class="hud-stats">
+          <div class="hud-stat-item">SCORE <b id="hud-score">000</b></div>
+          <div class="hud-stat-item">TIME <b id="hud-time">00:00</b></div>
+        </div>
+        <button id="btn-pause" class="pause-btn" title="Pause Game">PAUSE (P)</button>
+      </div>
+
+      <div class="canvas-wrapper">
+        <canvas id="game-canvas" width="1280" height="720"></canvas>
+        <div id="countdown-text" class="countdown-overlay" style="display: none;">3</div>
+        <div id="pause-modal" class="pause-overlay">
+          <h3 style="font-family: var(--title-font); font-size: 28px; color: #facc15; margin-bottom: 8px;">PAUSED</h3>
+          <p style="font-weight: 600;">Press <b>P</b> or click Resume to continue</p>
+          <button id="btn-resume" class="btn btn-primary" style="margin-top: 14px;">RESUME</button>
+        </div>
+      </div>
+
+      <!-- Mobile Touch Controls -->
+      <div class="mobile-controls-bar">
+        <div class="touch-cluster">
+          <button id="touch-left" class="touch-btn" aria-label="Left">◀</button>
+          <button id="touch-right" class="touch-btn" aria-label="Right">▶</button>
+        </div>
+        <div class="touch-cluster">
+          <button id="touch-skill" class="touch-btn touch-btn-action" aria-label="Skill">⚡ SKILL</button>
+          <button id="touch-super" class="touch-btn touch-btn-action touch-btn-super" aria-label="Super">🌟 SUPER</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SCREEN 5: GAME OVER SCREEN
+         ======================================================== -->
+    <section id="screen-over" class="screen">
+      <div class="game-over-panel">
+        <h2 id="over-heading">GREAT RUN!</h2>
+        
+        <img id="img-over-mascot" src="/static/assets/characters/pippin.png" alt="Result Mascot" style="height: 110px; object-fit: contain;">
+
+        <div class="score-banner">
+          <small style="font-weight: 700; color: #b45309;">FINAL SCORE</small>
+          <div id="over-final-score" class="final-number">000</div>
+          <div id="over-time-survived" style="font-size: 14px; font-weight: 800; color: #4b5563;">SURVIVED 00:00</div>
+        </div>
+
+        <div style="font-size: 13px; font-weight: 800; color: #4b5563; letter-spacing: 0.5px;">TREATS CAUGHT:</div>
+        <div id="over-caught-list" class="items-caught-summary"></div>
+
+        <div class="nickname-input-group">
+          <label for="input-nickname">SUBMIT NICKNAME TO WEBINAR LEADERBOARD:</label>
+          <div class="input-row">
+            <input id="input-nickname" type="text" maxlength="18" placeholder="Your Name">
+            <button id="btn-submit-score" class="btn btn-gold">SUBMIT</button>
+          </div>
+          <div id="submit-feedback" style="font-size: 13px; font-weight: 700; text-align: center; margin-top: 4px;"></div>
+        </div>
+
+        <div class="game-over-buttons">
+          <button id="btn-play-again" class="btn btn-primary">PLAY AGAIN ↺</button>
+          <button id="btn-over-home" class="btn btn-secondary">HOME ⌂</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Leaderboard Modal -->
+  <div id="modal-leaderboard" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🏆 TOP PLAYERS LEADERBOARD</h3>
+        <button id="btn-close-modal" class="modal-close-btn">✕</button>
+      </div>
+      <div id="leaderboard-items" class="leaderboard-list">
+        <p style="text-align: center; color: #999; padding: 20px;">Loading scores...</p>
+      </div>
+      <button id="btn-modal-done" class="btn btn-secondary" style="width: 100%;">CLOSE</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/js/game-data.js"></script>
+  <script src="/js/audio.js"></script>
+  <script src="/js/sprites.js"></script>
+  <script src="/js/game.js"></script>
+</body>
+</html>
